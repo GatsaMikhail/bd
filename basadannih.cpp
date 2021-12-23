@@ -234,7 +234,7 @@ public:
 				colIndexes.push_back(titles[col]);
 
 			else {
-				cerr << "ERROR: Column \"" << col << "\" not found!" << endl;
+				cerr << "OSHIBKA: Colonka \"" << col << "\" a gde?!" << endl;
 				return false;
 			}
 		}
@@ -265,7 +265,7 @@ public:
 			command = trim(command);
 
 			if (command.length() == 0 || command[0] != '(' || command[command.length() - 1] != ')') {
-				cerr << "ERROR: Missing arguments in command SHOW.\n\tIN [table name] SHOW (col1, col2, col3 ...)" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande SHOW.\n\tIN [table name] SHOW (col1, col2, col3 ...)" << endl;
 				return -1;
 			}
 
@@ -275,14 +275,14 @@ public:
 
 			if (columns.size() == 0)
 			{
-				cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 				return -1;
 			}
 
 			for (auto& col : columns) {
 				if (col == "")
 				{
-					cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+					cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 					return -1;
 				}
 				col = trim(col, "\"");
@@ -292,13 +292,13 @@ public:
 				return -1;
 			}
 		}
-		else if (firstPart.second == "delete") {
+		else if (firstPart.second == "udolit") {
 			command = command.substr(firstPart.first + 1);
 			command = trim(command);
 
 			if (isNumber(command) == false)
 			{
-				cerr << "ERROR: Incorrect arguments in command DELETE.\n\tIN [table name] DELETE [row id]" << endl;
+				cerr << "OSHIBKA: Nepravilnie argumenti v komande udolit.\n\tIN [table name] udolit [row id]" << endl;
 				return -1;
 			}
 
@@ -306,14 +306,14 @@ public:
 			auto ids_iter = find(ids.begin(), ids.end(), row_id);
 
 			if (ids_iter == ids.end()) {
-				cerr << "ERROR: Row with id=" << row_id << " doesn't exists!" << endl;
+				cerr << "OSHIBKA: Strochka s id=" << row_id << " net ego!" << endl;
 				return -1;
 			}
 
 			rows.erase(rows.begin() + (ids_iter - ids.begin()));
 			ids.erase(ids_iter);
 
-			cout << "SUCCESS: Row with id \"" << row_id << "\" deleted!" << endl;
+			cout << "POVEZLO: Strochka s id \"" << row_id << "\" udoleno!" << endl;
 		}
 		else if (firstPart.second == "add") {
 			command = command.substr(firstPart.first + 1);
@@ -323,7 +323,7 @@ public:
 
 			if (command == "")
 			{
-				cerr << "ERROR: Incorrect arguments in command ADD.\n\tIN [table name] ADD (value1, value2, ...)" << endl;
+				cerr << "OSHIBKA: Nepravilnie argumenti v komande ADD.\n\tIN [table name] ADD (value1, value2, ...)" << endl;
 				return -1;
 			}
 
@@ -334,7 +334,7 @@ public:
 
 			if (values.size() != titles.size())
 			{
-				cerr << "ERROR: " << values.size() << " values given, " << titles.size() << " expected" << endl;
+				cerr << "OSHIBKA: " << values.size() << " values given, " << titles.size() << " nachlos" << endl;
 				return -1;
 			}
 
@@ -344,7 +344,7 @@ public:
 
 			addRow(values);
 
-			cout << "SUCCESS: Row added to table!" << endl;
+			cout << "POVEZLO: Row added to table!" << endl;
 		}
 		else if (firstPart.second == "edit") {
 			command = command.substr(firstPart.first + 1);
@@ -355,7 +355,7 @@ public:
 			vector <string> args = split(command, ' ');
 			if (args.size() < 3)
 			{
-				cerr << "ERROR: Incorrect arguments in command EDIT.\n\tIN [table name] EDIT [column] [value] [id]" << endl;
+				cerr << "OSHIBKA: Nepravilnie argumenti v komande EDIT.\n\tIN [table name] EDIT [column] [value] [id]" << endl;
 				return -1;
 			}
 
@@ -365,7 +365,7 @@ public:
 
 			if (isNumber(args[2]) == false)
 			{
-				cerr << "ERROR: Incorrect arguments in command EDIT.\n\tIN [table name] EDIT [column] [value] [id]" << endl;
+				cerr << "OSHIBKA: Nepravilnie argumenti v komande EDIT.\n\tIN [table name] EDIT [column] [value] [id]" << endl;
 				return -1;
 			}
 
@@ -373,7 +373,7 @@ public:
 			auto ids_iter = find(ids.begin(), ids.end(), id);
 
 			if (ids_iter == ids.end()) {
-				cerr << "ERROR: Row with id=" << id << " doesn't exists!" << endl;
+				cerr << "OSHIBKA: Row with id=" << id << " doesn't exists!" << endl;
 				return -1;
 			}
 
@@ -381,13 +381,13 @@ public:
 
 			if (titles.find(args[0]) == titles.end())
 			{
-				cerr << "ERROR: Column \"" << args[0] << "\" doesn't exists!" << endl;
+				cerr << "OSHIBKA: Column \"" << args[0] << "\" doesn't exists!" << endl;
 				return -1;
 			}
 
 			rows[index][titles[args[0]]] = args[1];
 
-			cout << "SUCCESS: Value in row \"" << id << "\" and column \"" << args[0] << "\" changed to \"" << args[1] << "\"!" << endl;
+			cout << "POVEZLO: znach v stroke \"" << id << "\" i colonka \"" << args[0] << "\" pomenyalos na \"" << args[1] << "\"!" << endl;
 		}
 
 		return 1;
@@ -420,7 +420,7 @@ public:
 			command = trim(command);
 
 			if (command.length() == 0) {
-				cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 				return -1;
 			}
 
@@ -430,7 +430,7 @@ public:
 			name = trim(name, "\"");
 
 			if (findTableByName(name) != nullptr) {
-				cerr << "ERROR: Table \"" << name << "\" already exists!" << endl;
+				cerr << "OSHIBKA: Table \"" << name << "\" already exists!" << endl;
 				return -1;
 			}
 
@@ -438,7 +438,7 @@ public:
 			command = trim(command);
 
 			if (command.length() == 0 || command[0] != '(' || command[command.length() - 1] != ')') {
-				cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 				return -1;
 			}
 
@@ -448,7 +448,7 @@ public:
 
 			if (columns.size() == 0)
 			{
-				cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 				return -1;
 			}
 
@@ -459,7 +459,7 @@ public:
 				}
 				if (col == "")
 				{
-					cerr << "ERROR: Missing arguments in command CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
+					cerr << "OSHIBKA: Net argumenta v komande CREATE.\n\tCREATE [table name] (col1, col2, col3 ...)" << endl;
 					return -1;
 				}
 
@@ -468,7 +468,7 @@ public:
 
 			tables.push_back(new Table(name, columns));
 
-			cout << "SUCCESS: Table \"" << name << "\" created with " << columns.size() << " columns!" << endl;
+			cout << "POVEZLO: Table \"" << name << "\" created with " << columns.size() << " columns!" << endl;
 			return 1;
 
 		}
@@ -477,7 +477,7 @@ public:
 			command = trim(command);
 
 			if (command.length() == 0) {
-				cerr << "ERROR: Missing arguments in command DELETE.\n\tDELETE [table]" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande DELETE.\n\tDELETE [table]" << endl;
 				return -1;
 			}
 
@@ -487,7 +487,7 @@ public:
 
 			if (name == "")
 			{
-				cerr << "ERROR: Missing arguments in command DELETE.\n\tDELETE [table]" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande DELETE.\n\tDELETE [table]" << endl;
 				return -1;
 			}
 
@@ -495,13 +495,13 @@ public:
 
 			if (table == nullptr)
 			{
-				cerr << "ERROR: Table \"" << name << "\" not found!" << endl;
+				cerr << "OSHIBKA: Table \"" << name << "\" not found!" << endl;
 				return -1;
 			}
 
 			tables.erase(std::find(tables.begin(), tables.end(), table));
 			delete table;
-			cout << "SUCCESS: Table \"" << name << "\" deleted!" << endl;
+			cout << "POVEZLO: Tablica \"" << name << "\" udoleno!" << endl;
 			return 1;
 		}
 		else if (firstPart.second == "clear") {
@@ -509,7 +509,7 @@ public:
 			command = trim(command);
 
 			if (command.length() == 0) {
-				cerr << "ERROR: Missing arguments in command CLEAR.\n\tCLEAR [table]" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CLEAR.\n\tCLEAR [table]" << endl;
 				return -1;
 			}
 
@@ -519,7 +519,7 @@ public:
 
 			if (name == "")
 			{
-				cerr << "ERROR: Missing arguments in command CLEAR.\n\tCLEAR [table]" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande CLEAR.\n\tCLEAR [table]" << endl;
 				return -1;
 			}
 
@@ -527,12 +527,12 @@ public:
 
 			if (table == nullptr)
 			{
-				cerr << "ERROR: Table \"" << name << "\" not found!" << endl;
+				cerr << "OSHIBKA: Table \"" << name << "\" not found!" << endl;
 				return -1;
 			}
 
 			table->clear();
-			cout << "SUCCESS: Table \"" << name << "\" cleared!" << endl;
+			cout << "POVEZLO: Table \"" << name << "\" cleared!" << endl;
 		}
 		else if (firstPart.second == "rename") {
 			command = command.substr(firstPart.first + 1);
@@ -540,7 +540,7 @@ public:
 
 			auto names = split(command, ' ');
 			if (names.size() < 2) {
-				cerr << "ERROR: Missing arguments in command RENAME.\n\tRENAME [old name] [new name]" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande RENAME.\n\tRENAME [old name] [new name]" << endl;
 				return -1;
 			}
 
@@ -554,30 +554,30 @@ public:
 
 			if (table == nullptr)
 			{
-				cerr << "ERROR: Table \"" << oldName << "\" not found!" << endl;
+				cerr << "OSHIBKA: Table \"" << oldName << "\" not found!" << endl;
 				return -1;
 			}
 
 			if (findTableByName(newName) != nullptr) {
-				cerr << "ERROR: Table \"" << newName << "\" already exists!" << endl;
+				cerr << "OSHIBKA: Table \"" << newName << "\" already exists!" << endl;
 				return -1;
 			}
 
 			table->setName(newName);
-			cout << "SUCCESS: Table \"" << oldName << "\" renamed to \"" << newName << "\"!" << endl;
+			cout << "POVEZLO: Table \"" << oldName << "\" renamed to \"" << newName << "\"!" << endl;
 			return 1;
 		}
 		else if (firstPart.second == "exit") {
 			return 0;
 		}
 		else if (firstPart.second == "list") {
-			cout << "Tables: " << endl;
+			cout << "Tablici: " << endl;
 
 			for (int i = 0; i < tables.size(); i++) {
 				cout << "\t" << i + 1 << ". " << tables[i]->getName() << endl;
 			}
 			if (tables.size() == 0)
-				cout << "\tNo tables created yet!" << endl;
+				cout << "\tNema tablic!" << endl;
 		}
 
 		else if (firstPart.second == "in") {
@@ -591,14 +591,14 @@ public:
 
 			if (name == "")
 			{
-				cerr << "ERROR: Missing arguments in command IN.\n\tIN [table] ADD/EDIT/DELETE/SHOW" << endl;
+				cerr << "OSHIBKA: Net argumenta v komande IN.\n\tIN [table] Dobavit/Redact/Udolit/Pokazat" << endl;
 				return -1;
 			}
 
 			Table* table = findTableByName(name);
 
 			if (table == nullptr) {
-				cerr << "ERROR: Table \"" << name << "\" not found!" << endl;
+				cerr << "OSHIBKA: Tablica \"" << name << "\" gde blin!" << endl;
 				return -1;
 			}
 
@@ -611,7 +611,7 @@ public:
 		else if (command == "") return -1;
 
 		else {
-			cerr << "ERROR: Unknown command \"" << firstPart.second << "\"" << endl;
+			cerr << "OSHIBKA: neizvestnaya komanda \"" << firstPart.second << "\"" << endl;
 		}
 
 		return 1;
